@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :expenses
 
-  root 'application#hello'
+
+  resources :users
+
+  match 'expenses'=> 'expenses#index', :via => :get
+
+  root 'users#index'
 end

@@ -3,7 +3,7 @@ class CreateExpenses < ActiveRecord::Migration[5.1]
     create_table :expenses do |t|
       t.string :reason
       t.decimal :amount
-      t.integer :expense_Id
+      t.string :expense_id
 
       t.timestamps
     end

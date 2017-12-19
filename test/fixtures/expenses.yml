@@ -3,9 +3,9 @@
 one:
   reason: MyString
   amount: 9.99
-  expenseId: 1
+  expense_id: MyString
 
 two:
   reason: MyString
   amount: 9.99
-  expenseId: 1
+  expense_id: MyString
