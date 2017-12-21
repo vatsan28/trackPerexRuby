@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  protect_from_forgery with: :null_session
-
 
   # GET /users
   # GET /users.json
@@ -30,6 +28,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+
     @user = User.new(user_params)
 
     respond_to do |format|
@@ -75,6 +74,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:user_id, :firstName, :lastName, :phoneNumber, :email)
+      params.require(:user).permit(:firstName, :lastName, :phoneNumber, :email)
     end
 end
