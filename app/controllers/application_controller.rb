@@ -19,9 +19,9 @@ class ApplicationController < ActionController::Base
     puts response
 
     render json:{
-      status: 200,
-      message: response,
-      content_type: 'application/json'
+      :content_type => "text",
+      :status => 200,
+      :message => response
     }.to_json
 
   end
