@@ -20,7 +20,8 @@ class ApplicationController < ActionController::Base
 
     render json:{
       status: 200,
-      message: response
+      message: response,
+      content_type: 'application/json'
     }.to_json
 
   end
