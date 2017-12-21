@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   resources :users
 
   match 'expenses'=> 'expenses#index', :via => :get
+  match 'expense' => 'application#parse', :via => :post
 
-  root 'users#index'
 end
