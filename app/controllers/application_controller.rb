@@ -14,9 +14,10 @@ class ApplicationController < ActionController::Base
     message = params[:Body]
     user = User.find_by phoneNumber: userNumber
     puts message
-    response = user ? 'user already registered.' : 'user needs to register.'
+    userStatus = user ? 'user already registered.' : 'user needs to register.'
 
-    render plain: response
+    render plain: userStatus
+
 
   end
 end
