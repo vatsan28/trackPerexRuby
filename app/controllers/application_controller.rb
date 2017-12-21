@@ -14,17 +14,9 @@ class ApplicationController < ActionController::Base
     message = params[:Body]
     user = User.find_by phoneNumber: userNumber
     puts message
-    response = if (user) then 'user already registered.' else 'user needs to register.' end
+    response = user ? 'user already registered.' : 'user needs to register.'
 
-    puts response
-
-    render json:{
-      :content_type => "text",
-      :status => 200,
-      :message => response
-    }.to_json
+    render plain: response
 
   end
 end
-
-
