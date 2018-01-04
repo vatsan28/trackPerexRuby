@@ -37,11 +37,8 @@ class ApplicationController < ActionController::Base
   end
 
   def check_valid_email
-    if (User.find_by email: @message_contents[3])
-      return false
-    else
-      return true
-    end
+    return false if (User.find_by email: @message_contents[3])
+    return true
   end
 
   def respond_registration_success
