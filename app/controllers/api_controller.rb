@@ -5,11 +5,11 @@ class ApiController < ApplicationController
   def parse
     puts "TODO: parse message and figure out purpose of message."
     check_message_type('regTrackex')
+    puts ('-----' + @message_type)
     if @message_type =='reg'
       if (@message_contents[3].include? '@')
         if (check_valid_email)
-          new_user = User.create(firstName: @message_contents[1], lastName: @message_contents[2], phoneNumber: @userNumber, email: @message_contents[3])
-          puts new_user
+          User.create(firstName: @message_contents[1], lastName: @message_contents[2], phoneNumber: @userNumber, email: @message_contents[3])
           respond_registration_success
         else
           respond_email_taken
@@ -20,7 +20,10 @@ class ApiController < ApplicationController
     else
       if @user
         # Add steps for adding expenses.
-        respond_work_in_progress
+        expense = parse_expenses
+        Expense.create(reason: expense[:reason], amount: expense[:amount], user: @user);
+        total_expense = Expense.where(user: @user).sum(:amount)
+        respond_success_expense_recording(total_expense)
       else
         respond_register_request
       end
@@ -39,6 +42,23 @@ class ApiController < ApplicationController
   # def parse_message
   #   check
   # end
+  #
+
+  def parse_expenses
+    expense_string = @message.split(' ')
+    expense = {}
+    puts (expense_string.length)
+    if (expense_string[0][0].to_f.is_a? Numeric)
+      expense[:reason] = @message[@message.index(' ')+1..-1]
+      expense[:amount] = @message.split(' ')[0].to_f
+    elsif (expense_string[0][-1].to_f.is_a? Numeric)
+      expense[:reason] = @message[0..-2]
+      expense[:amount] = @message.split(' ')[-1].to_f
+    else
+      respond_with_correct_expense_format
+    end
+    return expense
+  end
 
   def check_message_type(check_type)
     @message_contents = @message.split(' ')
@@ -51,6 +71,10 @@ class ApiController < ApplicationController
 
   def respond_with_corrected_format
     render plain: 'For registration respond in this format: regTrackex <first name> <last name> <email Id>'
+  end
+
+  def respond_with_correct_expense_format
+    render plain: 'For recording an expense respond in this format <expense reason> <expense amount> or <expense amount> <expense reason>. Be mindful of the white space.'
   end
 
   def respond_email_taken
@@ -72,5 +96,9 @@ class ApiController < ApplicationController
 
   def respond_register_request
     render plain: 'Please register first. Reply with the following format for registering: regTrackex <first name> <last name> <email Id>'
+  end
+
+  def respond_success_expense_recording(today_expense)
+    render plain: "Expense recorded. Today's total expenses is #{today_expense} $."
   end
 end
